@@ -35,7 +35,7 @@ public class Main {
         return null;
     }
 
-    private HtmlForm getLoginForm(List<HtmlForm> forms) {
+    public HtmlForm getLoginForm(List<HtmlForm> forms) {
         for (HtmlForm form : forms) {
             if (form.getId().equalsIgnoreCase("login_form")) {
                 return form;
@@ -44,7 +44,7 @@ public class Main {
         return null;
     }
 
-    private List<HtmlForm> getFormsOf(HtmlPage htmlPage) {
+    public List<HtmlForm> getFormsOf(HtmlPage htmlPage) {
         return htmlPage.getForms();
     }
 }
