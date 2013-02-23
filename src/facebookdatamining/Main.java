@@ -5,9 +5,7 @@ import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,15 +24,16 @@ public class Main {
         page = main.logon(page);
 
         //Get info of profile
-        page = webClient.getPage("http://www.facebook.com/nay.francine/info");
+        page = webClient.getPage("http://www.facebook.com/Thiago.N.Oliveira/info");
+        main.getBasicInfo(page);
         main.getCityInfo(page);
         main.getFamilyInfo(page);
     }
 
     public HtmlPage logon(HtmlPage htmlPage) {
         HtmlForm loginForm = getLoginForm(getFormsOf(htmlPage));
-        loginForm.getInputByName("email").setValueAttribute("anbudeneve@hotmail.com");
-        loginForm.getInputByName("pass").setValueAttribute("leavemealone");
+        loginForm.getInputByName("email").setValueAttribute("eno.thiago@gmail.com");
+        loginForm.getInputByName("pass").setValueAttribute("@880apocalypsw510@");
         try {
             return htmlPage = (HtmlPage) loginForm.getInputByValue("Log In").click();
         } catch (IOException ex) {
@@ -69,4 +68,12 @@ public class Main {
             System.out.println(text.querySelector("div.fsm.fwn.fcg").getTextContent() + ": " + text.querySelector("div.fsl.fwb.fcb").getTextContent() + "\n");
         }
     }
+    
+        public void getBasicInfo(HtmlPage htmlPage) {
+        List<DomNode> info = htmlPage.querySelectorAll("#pagelet_basic table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
+        for (DomNode text : info) {
+            System.out.println(text.querySelector("tr th.label").getTextContent() + ": " + text.querySelector("tr td.data").asText() + "\n");
+        }
+    }
+    
 }
