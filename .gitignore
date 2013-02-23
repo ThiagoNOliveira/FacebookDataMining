@@ -1,9 +1,6 @@
 *.class
 
 # Package Files #
-*.jar
-*.war
-*.ear
 /FacebookDataMining/nbproject/private/
 /FacebookDataMining/build/
 /FacebookDataMining/dist/
