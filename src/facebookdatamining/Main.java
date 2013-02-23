@@ -32,8 +32,8 @@ public class Main {
 
     public HtmlPage logon(HtmlPage htmlPage) {
         HtmlForm loginForm = getLoginForm(getFormsOf(htmlPage));
-        loginForm.getInputByName("email").setValueAttribute("eno.thiago@gmail.com");
-        loginForm.getInputByName("pass").setValueAttribute("@880apocalypsw510@");
+        loginForm.getInputByName("email").setValueAttribute("pereirasilvaluana@yahoo.com.br");
+        loginForm.getInputByName("pass").setValueAttribute("leavemealone");
         try {
             return htmlPage = (HtmlPage) loginForm.getInputByValue("Log In").click();
         } catch (IOException ex) {

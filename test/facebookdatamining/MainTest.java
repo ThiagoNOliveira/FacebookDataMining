@@ -41,7 +41,7 @@ public class MainTest {
     @After
     public void tearDown() {
     }
-
+/*
     @Test
     public void logon_in_facebook() throws IOException {
         HtmlPage page = webClient.getPage("https://www.facebook.com");
@@ -74,7 +74,7 @@ public class MainTest {
         Assert.assertEquals(page.getForms(), main.getFormsOf(page));
 
     }
-/*
+
     @Test
     public void get_city_info() throws IOException {
         HtmlPage htmlPage = logonHelper();
