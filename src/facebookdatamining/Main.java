@@ -1,10 +1,13 @@
 package facebookdatamining;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,7 +23,11 @@ public class Main {
         HtmlPage page = webClient.getPage("https://www.facebook.com");
         Main main = new Main();
         page = main.logon(page);
-        System.out.println(page.getTitleText());
+
+        //Get info of profile
+        page = webClient.getPage("http://www.facebook.com/nay.francine/info");
+        System.out.println(main.getCityInfo(page).toString());
+
     }
 
     public HtmlPage logon(HtmlPage htmlPage) {
@@ -46,5 +53,15 @@ public class Main {
 
     public List<HtmlForm> getFormsOf(HtmlPage htmlPage) {
         return htmlPage.getForms();
+    }
+
+    public Map getCityInfo(HtmlPage htmlPage) {
+        List<DomNode> info = htmlPage.querySelectorAll("td.vTop.plm");
+        Map citiesInfo = new HashMap();
+
+        for (DomNode text : info) {
+            citiesInfo.put(text.querySelector("div.fsm.fwn.fcg").getTextContent(), text.querySelector("span.fwb a").getTextContent());
+        }
+        return citiesInfo;
     }
 }
