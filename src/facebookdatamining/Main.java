@@ -27,14 +27,14 @@ public class Main {
 
         //Get info of profile
         page = webClient.getPage("http://www.facebook.com/nay.francine/info");
-        System.out.println(main.getCityInfo(page).toString());
-
+        main.getCityInfo(page);
+        main.getFamilyInfo(page);
     }
 
     public HtmlPage logon(HtmlPage htmlPage) {
         HtmlForm loginForm = getLoginForm(getFormsOf(htmlPage));
-        loginForm.getInputByName("email").setValueAttribute("eno.thiago@gmail.com");
-        loginForm.getInputByName("pass").setValueAttribute("@880apocalypsw510@");
+        loginForm.getInputByName("email").setValueAttribute("anbudeneve@hotmail.com");
+        loginForm.getInputByName("pass").setValueAttribute("leavemealone");
         try {
             return htmlPage = (HtmlPage) loginForm.getInputByValue("Log In").click();
         } catch (IOException ex) {
@@ -56,13 +56,17 @@ public class Main {
         return htmlPage.getForms();
     }
 
-    public Map getCityInfo(HtmlPage htmlPage) {
+    public void getCityInfo(HtmlPage htmlPage) {
         List<DomNode> info = htmlPage.querySelectorAll("td.vTop.plm");
-        Map citiesInfo = new HashMap();
-
         for (DomNode text : info) {
-            citiesInfo.put(text.querySelector("div.fsm.fwn.fcg").getTextContent(), text.querySelector("span.fwb a").getTextContent());
+            System.out.println(text.querySelector("div.fsm.fwn.fcg").getTextContent() + ": " + text.querySelector("span.fwb a").getTextContent() + "\n");
         }
-        return citiesInfo;
+    }
+
+    public void getFamilyInfo(HtmlPage htmlPage) {
+        List<DomNode> info = htmlPage.querySelectorAll("div.familyItemBody._3dp._29k");
+        for (DomNode text : info) {
+            System.out.println(text.querySelector("div.fsm.fwn.fcg").getTextContent() + ": " + text.querySelector("div.fsl.fwb.fcb").getTextContent() + "\n");
+        }
     }
 }

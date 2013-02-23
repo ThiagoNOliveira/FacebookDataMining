@@ -74,7 +74,7 @@ public class MainTest {
         Assert.assertEquals(page.getForms(), main.getFormsOf(page));
 
     }
-
+/*
     @Test
     public void get_city_info() throws IOException {
         HtmlPage htmlPage = logonHelper();
@@ -84,7 +84,7 @@ public class MainTest {
         citiesInfo.put("Current City", "Contagem");
         Assert.assertEquals(citiesInfo, main.getCityInfo(htmlPage));
     }
-
+*/
     public HtmlPage logonHelper() throws IOException {
         HtmlPage htmlPage = webClient.getPage("https://www.facebook.com");
         List<HtmlForm> forms = htmlPage.getForms();
