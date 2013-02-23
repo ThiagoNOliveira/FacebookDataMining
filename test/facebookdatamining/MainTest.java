@@ -41,7 +41,7 @@ public class MainTest {
     @After
     public void tearDown() {
     }
-/*
+
     @Test
     public void logon_in_facebook() throws IOException {
         HtmlPage page = webClient.getPage("https://www.facebook.com");
@@ -68,13 +68,11 @@ public class MainTest {
     @Test
     public void get_forms_of_page() throws IOException {
         HtmlPage page = webClient.getPage("https://www.facebook.com");
-        List<HtmlForm> forms = page.getForms();
         Main main = new Main();
-
         Assert.assertEquals(page.getForms(), main.getFormsOf(page));
 
     }
-
+/*
     @Test
     public void get_city_info() throws IOException {
         HtmlPage htmlPage = logonHelper();
@@ -95,8 +93,8 @@ public class MainTest {
             }
         }
 
-        loginForm.getInputByName("email").setValueAttribute("eno.thiago@gmail.com");
-        loginForm.getInputByName("pass").setValueAttribute("@880apocalypsw510@");
+        loginForm.getInputByName("email").setValueAttribute("rafael.nascimento42@yahoo.com.br");
+        loginForm.getInputByName("pass").setValueAttribute("leavemealone");
 
         return htmlPage = (HtmlPage) loginForm.getInputByValue("Log In").click();
     }
