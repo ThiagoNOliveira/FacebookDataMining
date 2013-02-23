@@ -17,9 +17,10 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
         WebClient webClient = new WebClient();
+        webClient.waitForBackgroundJavaScriptStartingBefore(10000);
         HtmlPage page = webClient.getPage("https://www.facebook.com");
         Main main = new Main();
         page = main.logon(page);
