@@ -26,6 +26,7 @@ public class Main {
         //Get info of profile
         page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/info");
         main.getName(page);
+        main.getAbout(page);
         main.getBasicInfo(page);
         main.getCityInfo(page);
         main.getFamilyInfo(page);
@@ -79,6 +80,10 @@ public class Main {
         for (DomNode text : info) {
             System.out.println(text.querySelector("div.fsm.fwn.fcg").getTextContent() + ": " + text.querySelector("div.fsl.fwb.fcb").getTextContent() + "\n");
         }
+    }
+    
+    public void getAbout(HtmlPage htmlPage){
+        System.out.println(htmlPage.querySelector("div.uiHeader.fbTimelineAboutMeHeader + div.profileText").getTextContent() + "\n");
     }
 
     
