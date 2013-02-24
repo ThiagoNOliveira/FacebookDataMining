@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author Thiago N. Oliveira
  */
 public class Main {
-    
+
     public static void main(String[] args) throws IOException, InterruptedException {
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
         WebClient webClient = new WebClient();
@@ -30,8 +30,9 @@ public class Main {
         main.getBasicInfo(page);
         main.getCityInfo(page);
         main.getFamilyInfo(page);
+        main.getContactInfo(page);
     }
-    
+
     public HtmlPage logon(HtmlPage htmlPage) {
         HtmlForm loginForm = getLoginForm(getFormsOf(htmlPage));
         loginForm.getInputByName("email").setValueAttribute("natamichelle@yahoo.com.br");
@@ -43,7 +44,7 @@ public class Main {
         }
         return null;
     }
-    
+
     public HtmlForm getLoginForm(List<HtmlForm> forms) {
         for (HtmlForm form : forms) {
             if (form.getId().equalsIgnoreCase("login_form")) {
@@ -52,39 +53,50 @@ public class Main {
         }
         return null;
     }
-    
+
     public List<HtmlForm> getFormsOf(HtmlPage htmlPage) {
         return htmlPage.getForms();
     }
-    
-    public void getName(HtmlPage htmlPage){
+
+    public void getName(HtmlPage htmlPage) {
         System.out.println(htmlPage.querySelector("a.nameButton span").getTextContent() + "\n");
     }
-    
+
     public void getBasicInfo(HtmlPage htmlPage) {
         List<DomNode> info = htmlPage.querySelectorAll("#pagelet_basic table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
         for (DomNode text : info) {
             System.out.println(text.querySelector("tr th.label").getTextContent() + ": " + text.querySelector("tr td.data").asText() + "\n");
         }
     }
-    
+
     public void getCityInfo(HtmlPage htmlPage) {
         List<DomNode> info = htmlPage.querySelectorAll("td.vTop.plm");
         for (DomNode text : info) {
             System.out.println(text.querySelector("div.fsm.fwn.fcg").getTextContent() + ": " + text.querySelector("span.fwb a").getTextContent() + "\n");
         }
     }
-    
+
     public void getFamilyInfo(HtmlPage htmlPage) {
         List<DomNode> info = htmlPage.querySelectorAll("div.familyItemBody._3dp._29k");
         for (DomNode text : info) {
             System.out.println(text.querySelector("div.fsm.fwn.fcg").getTextContent() + ": " + text.querySelector("div.fsl.fwb.fcb").getTextContent() + "\n");
         }
     }
-    
-    public void getAbout(HtmlPage htmlPage){
-        System.out.println(htmlPage.querySelector("div.uiHeader.fbTimelineAboutMeHeader + div.profileText").getTextContent() + "\n");
+
+    public void getAbout(HtmlPage htmlPage) {
+        System.out.println(htmlPage.querySelector("#pagelet_bio  div.profileText").getTextContent() + "\n");
     }
 
-    
+    public void getContactInfo(HtmlPage htmlPage) {
+        List<DomNode> info = htmlPage.querySelectorAll("#pagelet_contact table tbody");
+        for (DomNode text : info) {
+            List<DomNode> tableRows = text.querySelectorAll("tr");
+            for (DomNode line : tableRows) {
+                if (line.querySelector("th.label") != null && line.querySelector("td.data") != null) {
+                    System.out.println(line.querySelector("th.label").getTextContent() + ": " + line.querySelector("td.data").asText() + "\n");
+                }
+            }
+
+        }
+    }
 }
