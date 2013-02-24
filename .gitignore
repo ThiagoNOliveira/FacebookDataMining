@@ -1,7 +1,7 @@
 *.class
 
 # Package Files #
-/FacebookDataMining/nbproject/private/
-/FacebookDataMining/build/
-/FacebookDataMining/build/test/results/
-/FacebookDataMining/dist/
+nbproject/private/
+build/
+build/test/results/
+dist/
