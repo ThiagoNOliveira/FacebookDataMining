@@ -26,13 +26,15 @@ public class Main {
         //Get info of profile
         page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/info");
         main.getName(page);
-         main.getAbout(page);
+        main.getAbout(page);
         main.getBasicInfo(page);
         main.getCityInfo(page);
         main.getFamilyInfo(page);
+        main.getEmployersInfo(page);
         main.getContactInfo(page);
+        page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
         page = main.logout(page);
-       
+
     }
 
     public HtmlPage logon(HtmlPage htmlPage) {
@@ -46,9 +48,9 @@ public class Main {
         }
         return null;
     }
-    
-    public HtmlPage logout(HtmlPage htmlPage) throws IOException{
-          HtmlForm logout = (HtmlForm) htmlPage.querySelector("#logout_form");
+
+    public HtmlPage logout(HtmlPage htmlPage) throws IOException {
+        HtmlForm logout = (HtmlForm) htmlPage.querySelector("#logout_form");
         return logout.getInputByValue("Sair").click();
     }
 
@@ -104,6 +106,13 @@ public class Main {
                 }
             }
 
+        }
+    }
+    
+     public void getEmployersInfo(HtmlPage htmlPage) {
+        List<DomNode> info = htmlPage.querySelectorAll("#pagelet_eduwork table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
+        for (DomNode text : info) {
+            System.out.println(text.querySelector("tr th.label").getTextContent() + ": " + text.querySelector("tr td.data").asText() + "\n");
         }
     }
 }
