@@ -26,16 +26,18 @@ public class Main {
         //Get info of profile
         page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/info");
         main.getName(page);
-        main.getAbout(page);
+         main.getAbout(page);
         main.getBasicInfo(page);
         main.getCityInfo(page);
         main.getFamilyInfo(page);
         main.getContactInfo(page);
+        page = main.logout(page);
+       
     }
 
     public HtmlPage logon(HtmlPage htmlPage) {
         HtmlForm loginForm = getLoginForm(getFormsOf(htmlPage));
-        loginForm.getInputByName("email").setValueAttribute("natamichelle@yahoo.com.br");
+        loginForm.getInputByName("email").setValueAttribute("pereirasilvaluana@yahoo.com.br");
         loginForm.getInputByName("pass").setValueAttribute("leavemealone");
         try {
             return htmlPage = (HtmlPage) loginForm.getInputByValue("Log In").click();
@@ -43,6 +45,11 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public HtmlPage logout(HtmlPage htmlPage) throws IOException{
+          HtmlForm logout = (HtmlForm) htmlPage.querySelector("#logout_form");
+        return logout.getInputByValue("Sair").click();
     }
 
     public HtmlForm getLoginForm(List<HtmlForm> forms) {
