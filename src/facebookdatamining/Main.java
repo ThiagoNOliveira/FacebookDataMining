@@ -2,6 +2,8 @@ package facebookdatamining;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.BufferedWriter;
@@ -35,6 +37,8 @@ public class Main {
         main.getFamilyInfo(page);
         main.getEmployersInfo(page);
         main.getContactInfo(page);
+        page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/favorites");
+        main.getFavoritesInfo(page);
         page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
         main.getQuantityOfFriends(page);
         main.getQuantityOfPhotos(page);
@@ -154,6 +158,21 @@ public class Main {
                 System.out.println(startPage.querySelector("li.photos span.text").getTextContent() + ": " + startPage.querySelector("li.photos span.count").getTextContent());
             }
             tempFile.deleteOnExit();
+        }
+    }
+
+    public void getFavoritesInfo(HtmlPage htmlPage) {
+
+        List<DomNode> favorites = htmlPage.querySelectorAll("div.allFavorites table.uiInfoTable tbody");
+        for (DomNode node : favorites) {
+            if (node.querySelector("div.mediaPortrait div.mediaPageName") != null) {
+                System.out.print(node.querySelector("th.label").getTextContent() + ": ");
+                List<DomNode> data = node.querySelectorAll("li");
+                for (DomNode item : data) {
+                    System.out.print(item.querySelector("div.mediaPortrait div.mediaPageName").getTextContent());
+                }
+            }
+            System.out.println("");
         }
     }
 }
