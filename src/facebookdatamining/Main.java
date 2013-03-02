@@ -1,9 +1,8 @@
 package facebookdatamining;
 
+import com.gargoylesoftware.htmlunit.JavaScriptPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.gargoylesoftware.htmlunit.html.DomNodeList;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.BufferedWriter;
@@ -13,6 +12,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -20,9 +21,11 @@ import java.util.logging.Logger;
  */
 public class Main {
 
+    private static WebClient webClient = new WebClient();
+    private long Id = 100003104984663L;
+
     public static void main(String[] args) throws IOException, InterruptedException {
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
-        WebClient webClient = new WebClient();
         webClient.waitForBackgroundJavaScriptStartingBefore(10000);
         HtmlPage page = webClient.getPage("https://www.facebook.com");
         Main main = new Main();
@@ -42,6 +45,8 @@ public class Main {
         page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
         main.getQuantityOfFriends(page);
         main.getQuantityOfPhotos(page);
+        main.getFriends(462);
+        page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
         page = main.logout(page);
 
     }
@@ -49,7 +54,7 @@ public class Main {
     public HtmlPage logon(HtmlPage htmlPage) {
         HtmlForm loginForm = getLoginForm(getFormsOf(htmlPage));
         loginForm.getInputByName("email").setValueAttribute("pereirasilvaluana@yahoo.com.br");
-        loginForm.getInputByName("pass").setValueAttribute("leavemealone");
+        loginForm.getInputByName("pass").setValueAttribute("leavemealone1");
         try {
             return htmlPage = (HtmlPage) loginForm.getInputByValue("Log In").click();
         } catch (IOException ex) {
@@ -174,5 +179,26 @@ public class Main {
             }
             System.out.println("");
         }
+    }
+
+    public void getFriends(int number) throws IOException {
+        for (int i = 0; i <= number; i++) {
+            String url = "http://www.facebook.com/ajax/browser/list/allfriends/?uid=@&start=" + i + "&__a=1";
+            url = url.replace("@", Long.toString(Id));
+            JavaScriptPage page = webClient.getPage(url);
+            String pageS = page.getContent();
+            Pattern pattern = Pattern.compile("\\/user\\.php\\?id=(.*?)\\\\");
+            Matcher matcher = pattern.matcher(pageS);
+            while (matcher.find()) {
+                String digits = matcher.group(1);
+                System.out.println(digits);
+            }
+            if (i == 0) {
+                i = 23;
+            } else {
+                i = i + 23;
+            }
+        }
+
     }
 }
