@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  *
  * @author Thiago N. Oliveira
  */
-public class FriendsExtractorService {
+public class FriendsExtractorService{
 
     public void getFriends(WebClient webClient, int number, long id) throws IOException {
         for (int i = 0; i <= number; i++) {

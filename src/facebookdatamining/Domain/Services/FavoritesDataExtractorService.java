@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author Thiago N. Oliveira
  */
-public class FavoritesDataExtractorService {
+public class FavoritesDataExtractorService{
 
     public void getFavoritesInfo(HtmlPage htmlPage) {
         List<DomNode> favorites = htmlPage.querySelectorAll("div.allFavorites table.uiInfoTable tbody");

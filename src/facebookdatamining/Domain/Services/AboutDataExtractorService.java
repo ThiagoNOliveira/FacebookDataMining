@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Thiago N. Oliveira
  */
-public class AboutDataExtractorService {
+public class AboutDataExtractorService{
 
     private WebClient webClient;
 

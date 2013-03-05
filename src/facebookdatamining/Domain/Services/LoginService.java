@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  *
  * @author Thiago N. Oliveira
  */
-public class LoginService {
+public class LoginService{
 
     public HtmlPage logon(HtmlPage htmlPage) {
         HtmlForm loginForm = getLoginForm(getFormsOf(htmlPage));

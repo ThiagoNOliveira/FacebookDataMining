@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Thiago N. Oliveira
  */
-public class ProfileDataExtractorService {
+public class ProfileDataExtractorService{
 
     public void getQuantityOfFriends(HtmlPage htmlPage) throws IOException {
         List<DomNode> nodes = htmlPage.querySelectorAll("code.hidden_elem");
