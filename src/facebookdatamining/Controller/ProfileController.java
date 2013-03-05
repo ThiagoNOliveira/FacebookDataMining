@@ -27,18 +27,13 @@ public class ProfileController implements IBaseController {
     @Override
     public void extractInfo(long Id) {
         try {
-            LoginService loginService = new LoginService();
-            AboutDataExtractorService aboutService = new AboutDataExtractorService(webClient);
-            FavoritesDataExtractorService favoritesService = new FavoritesDataExtractorService();
-            FriendsExtractorService friendsService = new FriendsExtractorService();
-            ProfileDataExtractorService profileService = new ProfileDataExtractorService();
-
-
             HtmlPage page = webClient.getPage("https://www.facebook.com");
 
+            LoginService loginService = new LoginService();
             loginService.logon(page);
 
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/info");
+            AboutDataExtractorService aboutService = new AboutDataExtractorService(webClient);
             aboutService.getName(page);
             aboutService.getAbout(page);
             aboutService.getBasicInfo(page);
@@ -46,12 +41,19 @@ public class ProfileController implements IBaseController {
             aboutService.getFamilyInfo(page);
             aboutService.getEmployersInfo(page);
             aboutService.getContactInfo(page);
+
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/favorites");
+            FavoritesDataExtractorService favoritesService = new FavoritesDataExtractorService();
             favoritesService.getFavoritesInfo(page);
+
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
+            ProfileDataExtractorService profileService = new ProfileDataExtractorService();
             profileService.getQuantityOfFriends(page);
             profileService.getQuantityOfPhotos(page);
+
+            FriendsExtractorService friendsService = new FriendsExtractorService();
             friendsService.getFriends(webClient, 462, Id);
+
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
             loginService.logout(page);
         } catch (IOException ex) {
