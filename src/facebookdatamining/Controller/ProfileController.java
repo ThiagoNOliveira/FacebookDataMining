@@ -2,6 +2,10 @@ package facebookdatamining.Controller;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import facebookdatamining.Domain.Services.AboutDataExtractorService;
+import facebookdatamining.Domain.Services.FavoritesDataExtractorService;
+import facebookdatamining.Domain.Services.FriendsExtractorService;
+import facebookdatamining.Domain.Services.LoginService;
 import facebookdatamining.Domain.Services.ProfileDataExtractorService;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -23,30 +27,35 @@ public class ProfileController implements IBaseController {
     @Override
     public void extractInfo(long Id) {
         try {
-            ProfileDataExtractorService profileDataExtractorService = new ProfileDataExtractorService(webClient);
+            LoginService loginService = new LoginService();
+            AboutDataExtractorService aboutService = new AboutDataExtractorService(webClient);
+            FavoritesDataExtractorService favoritesService = new FavoritesDataExtractorService();
+            FriendsExtractorService friendsService = new FriendsExtractorService();
+            ProfileDataExtractorService profileService = new ProfileDataExtractorService();
+
+
             HtmlPage page = webClient.getPage("https://www.facebook.com");
 
-            profileDataExtractorService.logon(page);
+            loginService.logon(page);
 
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/info");
-            profileDataExtractorService.getName(page);
-            profileDataExtractorService.getAbout(page);
-            profileDataExtractorService.getBasicInfo(page);
-            profileDataExtractorService.getCityInfo(page);
-            profileDataExtractorService.getFamilyInfo(page);
-            profileDataExtractorService.getEmployersInfo(page);
-            profileDataExtractorService.getContactInfo(page);
+            aboutService.getName(page);
+            aboutService.getAbout(page);
+            aboutService.getBasicInfo(page);
+            aboutService.getCityInfo(page);
+            aboutService.getFamilyInfo(page);
+            aboutService.getEmployersInfo(page);
+            aboutService.getContactInfo(page);
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/favorites");
-            profileDataExtractorService.getFavoritesInfo(page);
+            favoritesService.getFavoritesInfo(page);
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
-            profileDataExtractorService.getQuantityOfFriends(page);
-            profileDataExtractorService.getQuantityOfPhotos(page);
-            profileDataExtractorService.getFriends(462, Id);
+            profileService.getQuantityOfFriends(page);
+            profileService.getQuantityOfPhotos(page);
+            friendsService.getFriends(webClient, 462, Id);
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
-            profileDataExtractorService.logout(page);
+            loginService.logout(page);
         } catch (IOException ex) {
             Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 }
