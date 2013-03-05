@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="facebookdatamining.Domain.Entities.Profile" table="Profile">
+        <id name="Id" column="Id" type="long"/>
+        <property name="Name" column="Name" type="string"/>
+        <property name="About" column="About" type="text"/>
+        <property name="Birthday" column="Birthday" type="string"/>
+        <property name="Sex" column="Sex" type="string"/>
+        <property name="InterestedIn" column="InterestedIn" type="string"/>
+        <property name="ReltionshipStatus" column="ReltionshipStatus" type="string"/>
+        <property name="ReligiousView" column="ReligiousView" type="text"/>
+        <property name="PoliticalViews" column="PoliticalViews" type="text"/>
+        <property name="Emails" column="Emails" type="text"/>
+        <property name="MobilePhones" column="MobilePhones" type="text"/>
+        <property name="OtherPhones" column="OtherPhones" type="text"/>
+        <property name="IMScreenNames" column="IMScreenNames" type="text"/>
+        <property name="Address" column="Address" type="text"/>
+        <property name="WebSites" column="WebSites" type="text"/>
+        <property name="Networks" column="Networks" type="text"/>
+        <property name="Work" column="Work" type="text"/>
+        <property name="College" column="College" type="text"/>
+        <property name="HighSchool" column="HighSchool" type="text"/>
+        <property name="CurrentCity" column="CurrentCity" type="text"/>
+        <property name="Hometown" column="Hometown" type="text"/>
+        <property name="Family" column="Family" type="text"/>
+        <property name="Books" column="Books" type="text"/>
+        <property name="Music" column="Music" type="text"/>
+        <property name="Movies" column="Movies" type="text"/>
+        <property name="Televisions" column="Televisions" type="text"/>
+        <property name="Activities" column="Activities" type="text"/>
+        <property name="Interests" column="Interests" type="text"/>
+        <property name="QuantityOfPhotos" column="QuantityOfPhotos" type="string"/>
+        <property name="QuantityOfFriends" column="QuantityOfFriends" type="string"/>        
+    </class>
+</hibernate-mapping>

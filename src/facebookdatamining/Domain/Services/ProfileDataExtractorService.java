@@ -28,7 +28,7 @@ public class ProfileDataExtractorService {
         this.webClient = webClient;
         this.webClient.waitForBackgroundJavaScriptStartingBefore(10000);
     }
-
+   
     public void getName(HtmlPage htmlPage) {
         System.out.println(htmlPage.querySelector("a.nameButton span").getTextContent() + "\n");
     }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<config>
+	<crawller>
+		<levelLimit>3</levelLimit>
+	</crawller>
+	<proxy>
+        <!-- Value default  0.0.0.0 -->
+        <host>0.0.0.0</host> 
+        <!-- Value default  00000 -->
+		<port>00000</port>
+		<!-- Value default  none -->
+        <user>none</user>
+        <!-- Value default  none -->
+        <password>none</password>
+    </proxy>
+</config>
