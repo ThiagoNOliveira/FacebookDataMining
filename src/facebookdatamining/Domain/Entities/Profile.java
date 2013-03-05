@@ -7,6 +7,8 @@ package facebookdatamining.Domain.Entities;
 public class Profile {
 
     private long Id;
+    private long Level;
+    private boolean Read;
     private String Name;
     private String About;
     

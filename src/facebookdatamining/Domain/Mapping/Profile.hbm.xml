@@ -3,6 +3,7 @@
 <hibernate-mapping>
     <class name="facebookdatamining.Domain.Entities.Profile" table="Profile">
         <id name="Id" column="Id" type="long"/>
+        <property name="Level" column="Level" type="long" not-null="true"/>
         <property name="Name" column="Name" type="string"/>
         <property name="About" column="About" type="text"/>
         <property name="Birthday" column="Birthday" type="string"/>
@@ -31,6 +32,7 @@
         <property name="Activities" column="Activities" type="text"/>
         <property name="Interests" column="Interests" type="text"/>
         <property name="QuantityOfPhotos" column="QuantityOfPhotos" type="string"/>
-        <property name="QuantityOfFriends" column="QuantityOfFriends" type="string"/>        
+        <property name="QuantityOfFriends" column="QuantityOfFriends" type="string"/>
+        <property name="Read" column="Read" not-null="true" type="boolean"/>         
     </class>
 </hibernate-mapping>
