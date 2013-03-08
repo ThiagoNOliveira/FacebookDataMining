@@ -33,7 +33,7 @@ public class ProfileController implements IBaseController {
             profile.setId(Id);
             profile.setCrawllerLevel(1L);
             ProfileRepository profiles = new ProfileRepository();
-            
+
             HtmlPage page = webClient.getPage("https://www.facebook.com");
 
             LoginService loginService = new LoginService();
@@ -44,8 +44,8 @@ public class ProfileController implements IBaseController {
             profiles.add(profile);
             profile.setName(aboutService.getName(page));
             profile.setRecorded(true);
-            
-            aboutService.getAbout(page);
+            profile.setAbout(aboutService.getAbout(page));
+
             aboutService.getBasicInfo(page);
             aboutService.getCityInfo(page);
             aboutService.getFamilyInfo(page);
@@ -58,8 +58,8 @@ public class ProfileController implements IBaseController {
 
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
             ProfileDataExtractorService profileService = new ProfileDataExtractorService();
-            profileService.getQuantityOfFriends(page);
-            profileService.getQuantityOfPhotos(page);
+            profile.setQuantityOfFriends(profileService.getQuantityOfFriends(page));
+            profile.setQuantityOfPhotos(profileService.getQuantityOfPhotos(page));
 
             FriendsExtractorService friendsService = new FriendsExtractorService();
             friendsService.getFriends(webClient, 462, Id);

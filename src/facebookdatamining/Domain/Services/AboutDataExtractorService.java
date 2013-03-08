@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Thiago N. Oliveira
  */
-public class AboutDataExtractorService{
+public class AboutDataExtractorService {
 
     private WebClient webClient;
 
@@ -19,11 +19,11 @@ public class AboutDataExtractorService{
     }
 
     public String getName(HtmlPage htmlPage) {
-        return htmlPage.querySelector("a.nameButton span").getTextContent();
+        return (String) isNull(htmlPage.querySelector("a.nameButton span").getTextContent());
     }
 
     public void getBasicInfo(HtmlPage htmlPage) {
-        
+
         List<DomNode> info = htmlPage.querySelectorAll("#pagelet_basic table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
         for (DomNode text : info) {
             System.out.println(text.querySelector("tr th.label").getTextContent() + ": " + text.querySelector("tr td.data").asText() + "\n");
@@ -44,8 +44,9 @@ public class AboutDataExtractorService{
         }
     }
 
-    public void getAbout(HtmlPage htmlPage) {
-        System.out.println(htmlPage.querySelector("#pagelet_bio  div.profileText").getTextContent() + "\n");
+    public String getAbout(HtmlPage htmlPage) {
+        return (String) isNull(htmlPage.querySelector("#pagelet_bio  div.profileText").getTextContent());
+
     }
 
     public void getContactInfo(HtmlPage htmlPage) {
@@ -64,6 +65,14 @@ public class AboutDataExtractorService{
         List<DomNode> info = htmlPage.querySelectorAll("#pagelet_eduwork table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
         for (DomNode text : info) {
             System.out.println(text.querySelector("tr th.label").getTextContent() + ": " + text.querySelector("tr td.data").asText() + "\n");
+        }
+    }
+
+    private Object isNull(Object object) {
+        if (object == "" || object == null) {
+            return null;
+        } else {
+            return object;
         }
     }
 }
