@@ -18,11 +18,12 @@ public class AboutDataExtractorService{
         this.webClient.waitForBackgroundJavaScriptStartingBefore(10000);
     }
 
-    public void getName(HtmlPage htmlPage) {
-        System.out.println(htmlPage.querySelector("a.nameButton span").getTextContent() + "\n");
+    public String getName(HtmlPage htmlPage) {
+        return htmlPage.querySelector("a.nameButton span").getTextContent();
     }
 
     public void getBasicInfo(HtmlPage htmlPage) {
+        
         List<DomNode> info = htmlPage.querySelectorAll("#pagelet_basic table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
         for (DomNode text : info) {
             System.out.println(text.querySelector("tr th.label").getTextContent() + ": " + text.querySelector("tr td.data").asText() + "\n");

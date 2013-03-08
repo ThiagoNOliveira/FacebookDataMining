@@ -2,6 +2,8 @@ package facebookdatamining.Controller;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import facebookdatamining.Domain.Entities.Profile;
+import facebookdatamining.Domain.Repository.ProfileRepository;
 import facebookdatamining.Domain.Services.AboutDataExtractorService;
 import facebookdatamining.Domain.Services.FavoritesDataExtractorService;
 import facebookdatamining.Domain.Services.FriendsExtractorService;
@@ -27,6 +29,11 @@ public class ProfileController implements IBaseController {
     @Override
     public void extractInfo(long Id) {
         try {
+            Profile profile = new Profile();
+            profile.setId(Id);
+            profile.setCrawllerLevel(1L);
+            ProfileRepository profiles = new ProfileRepository();
+            
             HtmlPage page = webClient.getPage("https://www.facebook.com");
 
             LoginService loginService = new LoginService();
@@ -34,7 +41,10 @@ public class ProfileController implements IBaseController {
 
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/info");
             AboutDataExtractorService aboutService = new AboutDataExtractorService(webClient);
-            aboutService.getName(page);
+            profiles.add(profile);
+            profile.setName(aboutService.getName(page));
+            profile.setRecorded(true);
+            
             aboutService.getAbout(page);
             aboutService.getBasicInfo(page);
             aboutService.getCityInfo(page);
@@ -53,6 +63,7 @@ public class ProfileController implements IBaseController {
 
             FriendsExtractorService friendsService = new FriendsExtractorService();
             friendsService.getFriends(webClient, 462, Id);
+            profiles.update(profile);
 
             page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
             loginService.logout(page);
