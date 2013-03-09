@@ -29,78 +29,100 @@ public class ProfileController implements IBaseController {
     }
 
     @Override
-    public void extractInfo(long Id) {
+    public void extractInfo() {
+        String url = null;
         try {
-            Profile profile = new Profile();
-            profile.setId(Id);
-            profile.setCrawllerLevel(1L);
-            ProfileRepository profiles = new ProfileRepository();
-
             HtmlPage page = webClient.getPage("https://www.facebook.com");
-
             LoginService loginService = new LoginService();
             loginService.logon(page);
 
-            page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/info");
-            AboutDataExtractorService aboutService = new AboutDataExtractorService(webClient);
+            while (true) {
+                ProfileRepository profiles = new ProfileRepository();
+                for (Object id : profiles.getNext()) {
+                    Profile profile = new Profile();
+                    profile.setId(Long.parseLong(id.toString()));
+                    profile.setCrawllerLevel(1L);
 
-            profiles.add(profile);
-            profile.setName(aboutService.getName(page));
-            profile.setRecorded(true);
-            profile.setAbout(aboutService.getAbout(page));
+                    page = webClient.getPage("http://www.facebook.com/people/-/" + profile.getId());
+                    url = page.getUrl().toString();
+                    page = webClient.getPage(url + "/info");
+                    AboutDataExtractorService aboutService = new AboutDataExtractorService(webClient);
 
-            Map basicInfo = aboutService.getBasicInfo(page);
-            profile.setInterestedIn(basicInfo.get("Interessado em").toString());
-            profile.setPoliticalViews(basicInfo.get("Preferência política").toString());
-            profile.setReligiousView(basicInfo.get("Religião").toString());
-            profile.setReltionshipStatus(basicInfo.get("Status de relacionamento").toString());
-            profile.setSex(basicInfo.get("Gênero").toString());
-            profile.setBirthday(basicInfo.get("Data de nascimento").toString());
+                    profiles.add(profile);
+                    profile.setName(aboutService.getName(page));
+                    profile.setRecorded(true);
+                    profile.setAbout(aboutService.getAbout(page));
 
-            Map cityInfo = aboutService.getCityInfo(page);
-            profile.setCurrentCity(cityInfo.get("Cidade atual").toString());
-            profile.setHometown(cityInfo.get("Cidade natal").toString());
-            profile.setFamily(aboutService.getFamilyInfo(page).toString());
+                    Map basicInfo = aboutService.getBasicInfo(page);
+                    profile.setInterestedIn(isNull(basicInfo.get("Interessado em")));
+                    profile.setPoliticalViews(isNull(basicInfo.get("Preferência política")));
+                    profile.setReligiousView(isNull(basicInfo.get("Religião")));
+                    profile.setReltionshipStatus(isNull(basicInfo.get("Status de relacionamento")));
+                    profile.setSex(isNull(basicInfo.get("Gênero")));
+                    profile.setBirthday(isNull(basicInfo.get("Data de nascimento")));
 
-            Map educationAndWorkInfo = aboutService.getEmployersInfo(page);
-            profile.setJob((String)educationAndWorkInfo.get("Empregadores"));
-            profile.setCollege((String)educationAndWorkInfo.get("Ensino superior"));
-            profile.setHighSchool((String)educationAndWorkInfo.get("Ensino médio"));
-            
-            Map contactInfo = aboutService.getContactInfo(page);
-            profile.setAddress((String) contactInfo.get("Endereço"));
-            profile.setEmails((String) contactInfo.get("E-mail"));
-            profile.setIMScreenNames((String) contactInfo.get("Outros contatos"));
-            profile.setMobilePhones((String) contactInfo.get("Celulares"));
-            profile.setNetworks((String) contactInfo.get("Redes"));
-            profile.setOtherPhones((String) contactInfo.get("Outros telefones"));
-            profile.setWebSites((String) contactInfo.get("Site"));
+                    Map cityInfo = aboutService.getCityInfo(page);
+                    profile.setCurrentCity(isNull(cityInfo.get("Cidade atual")));
+                    profile.setHometown(isNull(cityInfo.get("Cidade natal")));
+                    profile.setFamily(isNull(aboutService.getFamilyInfo(page)));
+
+                    Map educationAndWorkInfo = aboutService.getEmployersInfo(page);
+                    profile.setJob(isNull(educationAndWorkInfo.get("Empregadores")));
+                    profile.setCollege(isNull(educationAndWorkInfo.get("Ensino superior")));
+                    profile.setHighSchool(isNull(educationAndWorkInfo.get("Ensino médio")));
+
+                    Map contactInfo = aboutService.getContactInfo(page);
+                    profile.setAddress(isNull(contactInfo.get("Endereço")));
+                    profile.setEmails(isNull(contactInfo.get("E-mail")));
+                    profile.setIMScreenNames(isNull(contactInfo.get("Outros contatos")));
+                    profile.setMobilePhones(isNull(contactInfo.get("Celulares")));
+                    profile.setNetworks(isNull(contactInfo.get("Redes")));
+                    profile.setOtherPhones(isNull(contactInfo.get("Outros telefones")));
+                    profile.setWebSites(isNull(contactInfo.get("Site")));
 
 
-            page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52/favorites");
-            FavoritesDataExtractorService favoritesService = new FavoritesDataExtractorService();
-            Map favoritesInfo = favoritesService.getFavoritesInfo(page);
-            profile.setActivities((String) favoritesInfo.get("Atividades"));
-            profile.setBooks((String) favoritesInfo.get("Livros"));
-            profile.setInterests((String) favoritesInfo.get("Interesses"));
-            profile.setMovies((String) favoritesInfo.get("Filmes"));
-            profile.setMusic((String) favoritesInfo.get("Música"));
-            profile.setTelevisions((String) favoritesInfo.get("Televisão"));
+                    page = webClient.getPage(url + "/favorites");
+                    FavoritesDataExtractorService favoritesService = new FavoritesDataExtractorService();
+                    Map favoritesInfo = favoritesService.getFavoritesInfo(page);
+                    profile.setActivities(isNull(favoritesInfo.get("Atividades")));
+                    profile.setBooks(isNull(favoritesInfo.get("Livros")));
+                    profile.setInterests(isNull(favoritesInfo.get("Interesses")));
+                    profile.setMovies(isNull(favoritesInfo.get("Filmes")));
+                    profile.setMusic(isNull(favoritesInfo.get("Música")));
+                    profile.setTelevisions(isNull(favoritesInfo.get("Televisão")));
 
-            page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
-            ProfileDataExtractorService profileService = new ProfileDataExtractorService();
-            profile.setQuantityOfFriends(profileService.getQuantityOfFriends(page));
-            profile.setQuantityOfPhotos(profileService.getQuantityOfPhotos(page));
+                    page = webClient.getPage(url);
+                    ProfileDataExtractorService profileService = new ProfileDataExtractorService();
+                    profile.setQuantityOfFriends(profileService.getQuantityOfFriends(page));
+                    profile.setQuantityOfPhotos(profileService.getQuantityOfPhotos(page));
 
-            FriendsExtractorService friendsService = new FriendsExtractorService();
-            Set friendsList = friendsService.getFriends(webClient, 462, Id);
-            profile.setFriends(friendsList.toString());
-            profiles.update(profile);
-
-            page = webClient.getPage("http://www.facebook.com/luana.pereirasilva.52");
-            loginService.logout(page);
+                    FriendsExtractorService friendsService = new FriendsExtractorService();
+                    Set friendsList = friendsService.getFriends(webClient, profile.getQuantityOfFriends(), profile.getId());
+                    for (Object item : friendsList) {
+                        Profile profile1 = new Profile();
+                        profile1.setId(Long.parseLong(item.toString()));
+                        profile1.setCrawllerLevel(profile.getCrawllerLevel() + 1);
+                        profiles.add(profile1);
+                    }
+                    profile.setFriends(friendsList.toString());
+                    profiles.update(profile);
+                }
+                page = webClient.getPage(url);
+                loginService.logout(page);
+            }
         } catch (IOException ex) {
             Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private static <T> String isNull(T object) {
+        if (object == "" || object == null) {
+            return null;
+        } else {
+            if (object instanceof String) {
+                return (String) object;
+            }
+            return null;
         }
     }
 }

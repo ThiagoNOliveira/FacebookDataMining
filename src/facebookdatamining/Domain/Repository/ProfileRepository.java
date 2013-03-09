@@ -6,6 +6,11 @@ import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,20 +24,33 @@ public class ProfileRepository extends BaseRepository {
 
     public void add(Profile profile) {
         conn = getConnection();
-        query = "INSERT INTO `profile`(`Id`, `CrawllerLevel`) VALUES (?,?);";
         try {
+            query = "Select Id FROM profile where Id = ?;";
             ps = conn.prepareStatement(query);
             ps.setLong(1, profile.getId());
-            ps.setLong(2, profile.getCrawllerLevel());
-            ps.execute();
-            ps.close();
-            conn.close();
-        } catch (Exception ex) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            ex.printStackTrace(pw);
-            System.out.println(sw.toString());
+            ResultSet retorno = ps.executeQuery();
+            if (!retorno.next()) {
+                query = "INSERT INTO `profile`(`Id`, `CrawllerLevel`) VALUES (?,?);";
+                try {
+                    ps = conn.prepareStatement(query);
+                    ps.setLong(1, profile.getId());
+                    ps.setLong(2, profile.getCrawllerLevel());
+                    ps.execute();
+                    ps.close();
+                    conn.close();
+                } catch (Exception ex) {
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pw = new PrintWriter(sw);
+                    ex.printStackTrace(pw);
+                    System.out.println(sw.toString());
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ProfileRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+
     }
 
     public void update(Profile profile) {
@@ -66,17 +84,19 @@ public class ProfileRepository extends BaseRepository {
         }
     }
 
-    public ResultSet getNext() {
+    public Set getNext() {
         try {
             conn = getConnection();
-            query = "SELECT * FROM LOG";
+            query = "Select Id FROM profile where Recorded = 0;";
             ps = conn.prepareStatement(query);
             ResultSet retorno = ps.executeQuery();
-
+            Set list = new HashSet();
+            while (retorno.next()) {
+                list.add(retorno.getLong("Id"));
+            }
             ps.close();
             conn.close();
-
-            return retorno;
+            return list;
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);

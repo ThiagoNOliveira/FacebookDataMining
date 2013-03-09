@@ -28,7 +28,7 @@ public class ProfileDataExtractorService {
             bw.close();
             HtmlPage startPage = webClientM.getPage(tempFile.toURI().toURL().toString());
             if (startPage.querySelector("li.friends span.count") != null) {
-                quantityOfFriends = Integer.parseInt(startPage.querySelector("li.friends span.count").getTextContent());
+                quantityOfFriends = Integer.parseInt(startPage.querySelector("li.friends span.count").getTextContent().replace(".", ""));
             }
             tempFile.deleteOnExit();
         }

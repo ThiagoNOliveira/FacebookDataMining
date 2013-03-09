@@ -54,8 +54,11 @@ public class AboutDataExtractorService {
     }
 
     public String getAbout(HtmlPage htmlPage) {
-        return (String) isNull(htmlPage.querySelector("#pagelet_bio  div.profileText").getTextContent());
-
+        if (htmlPage.querySelector("#pagelet_bio  div.profileText") != null) {
+        return htmlPage.querySelector("#pagelet_bio  div.profileText").getTextContent();
+        }else{
+            return null;
+        }
     }
 
     public Map getContactInfo(HtmlPage htmlPage) {

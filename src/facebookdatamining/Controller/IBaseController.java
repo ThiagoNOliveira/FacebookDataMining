@@ -6,5 +6,5 @@ package facebookdatamining.Controller;
  */
 public interface IBaseController {
 
-    public void extractInfo(long Id);
+    public void extractInfo();
 }

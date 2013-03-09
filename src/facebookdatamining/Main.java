@@ -14,6 +14,6 @@ public class Main {
 
     public static void main(String[] args) {
         IBaseController Controller = new ProfileController();
-        Controller.extractInfo(Id);
+        Controller.extractInfo();
     }
 }
