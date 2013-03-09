@@ -3,6 +3,8 @@ package facebookdatamining.Domain.Services;
 import com.gargoylesoftware.htmlunit.JavaScriptPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,9 +12,10 @@ import java.util.regex.Pattern;
  *
  * @author Thiago N. Oliveira
  */
-public class FriendsExtractorService{
+public class FriendsExtractorService {
 
-    public void getFriends(WebClient webClient, int number, long id) throws IOException {
+    public Set getFriends(WebClient webClient, int number, long id) throws IOException {
+        Set friends = new LinkedHashSet();
         for (int i = 0; i <= number; i++) {
             String url = "http://www.facebook.com/ajax/browser/list/allfriends/?uid=@&start=" + i + "&__a=1";
             url = url.replace("@", Long.toString(id));
@@ -22,7 +25,7 @@ public class FriendsExtractorService{
             Matcher matcher = pattern.matcher(pageS);
             while (matcher.find()) {
                 String digits = matcher.group(1);
-                System.out.println(digits);
+                friends.add(digits);
             }
             if (i == 0) {
                 i = 23;
@@ -30,6 +33,7 @@ public class FriendsExtractorService{
                 i = i + 23;
             }
         }
+        return friends;
 
     }
 }
