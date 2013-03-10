@@ -1,6 +1,5 @@
 package facebookdatamining.Domain.Services;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.util.HashMap;
@@ -15,19 +14,24 @@ import java.util.Set;
  */
 public class AboutDataExtractorService {
 
-    private WebClient webClient;
+    private HtmlPage aboutPage;
 
-    public AboutDataExtractorService(WebClient webClient) {
-        this.webClient = webClient;
-        this.webClient.waitForBackgroundJavaScriptStartingBefore(10000);
+    public AboutDataExtractorService(HtmlPage aboutPage) {
+        this.aboutPage = aboutPage;
     }
 
-    public String getName(HtmlPage htmlPage) {
-        return (String) isNull(htmlPage.querySelector("a.nameButton span").getTextContent());
+    public String getName() {
+        System.out.println(aboutPage.getTitleText());
+        DomNode name = aboutPage.querySelector("a.nameButton span");
+        if (name != null) {
+            return name.getTextContent();
+        } else {
+            return null;
+        }
     }
 
-    public Map getBasicInfo(HtmlPage htmlPage) {
-        List<DomNode> info = htmlPage.querySelectorAll("#pagelet_basic table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
+    public Map getBasicInfo() {
+        List<DomNode> info = aboutPage.querySelectorAll("#pagelet_basic table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
         Map map = new HashMap();
         for (DomNode text : info) {
             map.put(text.querySelector("tr th.label").getTextContent(), text.querySelector("tr td.data").asText());
@@ -35,17 +39,21 @@ public class AboutDataExtractorService {
         return map;
     }
 
-    public Map getCityInfo(HtmlPage htmlPage) {
-        List<DomNode> info = htmlPage.querySelectorAll("td.vTop.plm");
+    public Map getCityInfo() {
+        List<DomNode> info = aboutPage.querySelectorAll("td.vTop.plm");
         Map map = new HashMap();
         for (DomNode text : info) {
-            map.put(text.querySelector("div.fsm.fwn.fcg").getTextContent(), text.querySelector("span.fwb a").getTextContent());
+            DomNode key = text.querySelector("div.fsm.fwn.fcg");
+            DomNode value = text.querySelector("span.fwb a");
+            if (key != null && value != null) {
+                map.put(key.getTextContent(), value.getTextContent());
+            }
         }
         return map;
     }
 
-    public Set getFamilyInfo(HtmlPage htmlPage) {
-        List<DomNode> info = htmlPage.querySelectorAll("div.familyItemBody._3dp._29k");
+    public Set getFamilyInfo() {
+        List<DomNode> info = aboutPage.querySelectorAll("div.familyItemBody._3dp._29k");
         Set family = new LinkedHashSet();
         for (DomNode text : info) {
             family.add(text.querySelector("div.fsm.fwn.fcg").getTextContent() + ": " + text.querySelector("div.fsl.fwb.fcb").getTextContent());
@@ -53,16 +61,16 @@ public class AboutDataExtractorService {
         return family;
     }
 
-    public String getAbout(HtmlPage htmlPage) {
-        if (htmlPage.querySelector("#pagelet_bio  div.profileText") != null) {
-        return htmlPage.querySelector("#pagelet_bio  div.profileText").getTextContent();
-        }else{
+    public String getAbout() {
+        if (aboutPage.querySelector("#pagelet_bio  div.profileText") != null) {
+            return aboutPage.querySelector("#pagelet_bio  div.profileText").getTextContent();
+        } else {
             return null;
         }
     }
 
-    public Map getContactInfo(HtmlPage htmlPage) {
-        List<DomNode> info = htmlPage.querySelectorAll("#pagelet_contact table tbody");
+    public Map getContactInfo() {
+        List<DomNode> info = aboutPage.querySelectorAll("#pagelet_contact table tbody");
         Map map = new HashMap();
         for (DomNode text : info) {
             List<DomNode> tableRows = text.querySelectorAll("tr");
@@ -75,20 +83,12 @@ public class AboutDataExtractorService {
         return map;
     }
 
-    public Map getEmployersInfo(HtmlPage htmlPage) {
-        List<DomNode> info = htmlPage.querySelectorAll("#pagelet_eduwork table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
+    public Map getEmployersInfo() {
+        List<DomNode> info = aboutPage.querySelectorAll("#pagelet_eduwork table.uiInfoTable.profileInfoTable.uiInfoTableFixed tbody");
         Map educationAndWork = new HashMap();
         for (DomNode text : info) {
             educationAndWork.put(text.querySelector("tr th.label").getTextContent(), text.querySelector("tr td.data").asText());
         }
         return educationAndWork;
-    }
-
-    private Object isNull(Object object) {
-        if (object == "" || object == null) {
-            return null;
-        } else {
-            return object;
-        }
     }
 }

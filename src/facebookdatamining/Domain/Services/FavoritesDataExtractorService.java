@@ -10,10 +10,16 @@ import java.util.Map;
  *
  * @author Thiago N. Oliveira
  */
-public class FavoritesDataExtractorService{
+public class FavoritesDataExtractorService {
 
-    public Map getFavoritesInfo(HtmlPage htmlPage) {
-        List<DomNode> favorites = htmlPage.querySelectorAll("div.allFavorites table.uiInfoTable tbody");
+    private HtmlPage favoritesPage;
+
+    public FavoritesDataExtractorService(HtmlPage favoritesPage) {
+        this.favoritesPage = favoritesPage;
+    }
+
+    public Map getFavoritesInfo() {
+        List<DomNode> favorites = favoritesPage.querySelectorAll("div.allFavorites table.uiInfoTable tbody");
         Map favoritesMap = new HashMap();
         for (DomNode node : favorites) {
             if (node.querySelector("div.mediaPortrait div.mediaPageName") != null) {

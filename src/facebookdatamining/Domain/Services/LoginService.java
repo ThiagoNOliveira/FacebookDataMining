@@ -2,36 +2,57 @@ package facebookdatamining.Domain.Services;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import facebookdatamining.Main;
-import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Thiago N. Oliveira
  */
-public class LoginService{
+public class LoginService {
 
-    public HtmlPage logon(HtmlPage htmlPage) {
-        HtmlForm loginForm = getLoginForm(getFormsOf(htmlPage));
+    private HtmlPage loginPage;
+    private HtmlPage homePage;
+
+    public LoginService(HtmlPage loginPage) {
+        this.loginPage = loginPage;
+    }
+
+    public void logon() {
+        System.out.println(loginPage.getTitleText());
+        HtmlForm loginForm = getLoginForm(getFormsOf(loginPage));
         loginForm.getInputByName("email").setValueAttribute("pereirasilvaluana@yahoo.com.br");
         loginForm.getInputByName("pass").setValueAttribute("leavemealone1");
         try {
-            return htmlPage = (HtmlPage) loginForm.getInputByValue("Log In").click();
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            homePage = (HtmlPage) loginForm.getInputByValue("Log In").click();
+            // if (homePage.getTitleText().contains("Log In | Facebook")) {
+            //   loginForm = getLoginForm(getFormsOf(homePage));
+            //loginForm.getInputByName("email").setValueAttribute("pereirasilvaluana@yahoo.com.br");
+            // loginForm.getInputByName("pass").setValueAttribute("leavemealone1");
+            // homePage = (HtmlPage) loginForm.getInputByValue("Log In").click();
+            // if (homePage.getTitleText().contains("Log In | Facebook")) {
+            //    logon();
+            //}
+            // }
+        } catch (Exception ex) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            System.out.println(sw.toString());
+            logon();
         }
-        return null;
     }
 
-    public HtmlPage logout(HtmlPage htmlPage) {
-        HtmlForm logout = (HtmlForm) htmlPage.querySelector("#logout_form");
+    public HtmlPage logout() {
+        HtmlForm logout = (HtmlForm) homePage.querySelector("#logout_form");
         try {
             return logout.getInputByValue("Sair").click();
-        } catch (IOException ex) {
-            Logger.getLogger(LoginService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            System.out.println(sw.toString());
         }
         return null;
     }
