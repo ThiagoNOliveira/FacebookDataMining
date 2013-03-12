@@ -47,7 +47,7 @@ public class LoginService {
     public HtmlPage logout() {
         HtmlForm logout = (HtmlForm) homePage.querySelector("#logout_form");
         try {
-            return logout.getInputByValue("Sair").click();
+            return logout.getInputByValue("Log Out").click();
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);

@@ -1,19 +1,21 @@
 package facebookdatamining.Domain.Services;
 
+import com.gargoylesoftware.htmlunit.JavaScriptPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import facebookdatamining.Controller.ProfileController;
 import facebookdatamining.Domain.Entities.Profile;
 import facebookdatamining.Domain.Repository.ProfileRepository;
 import facebookdatamining.InfraStructure.ExtractProfileInfoTask;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -41,7 +43,10 @@ public class ExtractorService {
             //}
             return htmlPage;
         } catch (Exception ex) {
-            Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            System.out.println(sw.toString());
             return null;
         }
     }
@@ -54,7 +59,10 @@ public class ExtractorService {
                 return webClient.getPage(profileURL + "/info");
             }
         } catch (Exception ex) {
-            Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            System.out.println(sw.toString());
             return null;
         }
     }
@@ -67,21 +75,34 @@ public class ExtractorService {
                 return webClient.getPage(profileURL + "/favorites");
             }
         } catch (Exception ex) {
-            Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            System.out.println(sw.toString());
             return null;
         }
     }
 
     public void getInfo(Profile profile) {
         ExecutorService es = Executors.newFixedThreadPool(10);
+        try {
+            es.awaitTermination(2, TimeUnit.SECONDS);
+        } catch (Exception ex) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            System.out.println(sw.toString());
+        }
         CompletionService<Object> cs = new ExecutorCompletionService<>(es);
 
         HtmlPage profilePage = getProfilePage(profile);
         String profileURL = profilePage.getUrl().toString();
         HtmlPage aboutPage = getAboutPage(profileURL);
         HtmlPage favoritesPage = getFavoritesPage(profileURL);
+        String friends = getFriendsData(profile);
 
-        final ExtractProfileInfoTask task = new ExtractProfileInfoTask(profile, profilePage, aboutPage, favoritesPage, profiles);
+
+        final ExtractProfileInfoTask task = new ExtractProfileInfoTask(profile, profilePage, aboutPage, favoritesPage, friends, profiles);
 
         cs.submit(new Callable<Object>() {
             @Override
@@ -92,11 +113,26 @@ public class ExtractorService {
         });
     }
 
-    private void getFriends(Profile profile, FriendsExtractorService friendsService) {
+    private String getFriendsData(Profile profile) {
+        String friends = "";
         if (profile.getCrawllerLevel() <= 3) {
-            Set friendsList = friendsService.getFriends();
-            profiles.add(friendsList, profile);
-            profiles.updateFriends(profile, friendsList);
+            for (int i = 0; i <= profile.getQuantityOfFriends(); i++) {
+                try {
+                    JavaScriptPage page = webClient.getPage("http://www.facebook.com/ajax/browser/list/allfriends/?uid=" + Long.toString(profile.getId()) + "&start=" + i + "&__a=1");
+                    friends += page.getContent();
+                } catch (Exception ex) {
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pw = new PrintWriter(sw);
+                    ex.printStackTrace(pw);
+                    System.out.println(sw.toString());
+                }
+                if (i == 0) {
+                    i = 23;
+                } else {
+                    i = i + 23;
+                }
+            }
         }
+        return friends;
     }
 }
