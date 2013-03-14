@@ -3,13 +3,11 @@ package facebookdatamining.Domain.Services;
 import com.gargoylesoftware.htmlunit.JavaScriptPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import facebookdatamining.Controller.ProfileController;
 import facebookdatamining.Domain.Entities.Profile;
 import facebookdatamining.Domain.Repository.ProfileRepository;
 import facebookdatamining.InfraStructure.ExtractProfileInfoTask;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
@@ -87,6 +85,7 @@ public class ExtractorService {
         ExecutorService es = Executors.newFixedThreadPool(10);
         try {
             es.awaitTermination(2, TimeUnit.SECONDS);
+
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
@@ -96,21 +95,26 @@ public class ExtractorService {
         CompletionService<Object> cs = new ExecutorCompletionService<>(es);
 
         HtmlPage profilePage = getProfilePage(profile);
-        String profileURL = profilePage.getUrl().toString();
-        HtmlPage aboutPage = getAboutPage(profileURL);
-        HtmlPage favoritesPage = getFavoritesPage(profileURL);
-        String friends = getFriendsData(profile);
 
+        if (!profilePage.getTitleText().contains("Page Not Found")) {
 
-        final ExtractProfileInfoTask task = new ExtractProfileInfoTask(profile, profilePage, aboutPage, favoritesPage, friends, profiles);
+            String profileURL = profilePage.getUrl().toString();
+            HtmlPage aboutPage = getAboutPage(profileURL);
+            HtmlPage favoritesPage = getFavoritesPage(profileURL);
+            String friends = getFriendsData(profile);
 
-        cs.submit(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                task.extractProfileInfo();
-                return null;
-            }
-        });
+            final ExtractProfileInfoTask task = new ExtractProfileInfoTask(profile, profilePage, aboutPage, favoritesPage, friends, profiles);
+
+            cs.submit(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    task.extractProfileInfo();
+                    return null;
+                }
+            });
+
+            es.shutdown();
+        }
     }
 
     private String getFriendsData(Profile profile) {

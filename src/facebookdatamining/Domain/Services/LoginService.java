@@ -14,16 +14,20 @@ public class LoginService {
 
     private HtmlPage loginPage;
     private HtmlPage homePage;
+    private String login;
+    private String password;
 
-    public LoginService(HtmlPage loginPage) {
+    public LoginService(HtmlPage loginPage, String login, String password) {
         this.loginPage = loginPage;
+        this.login = login;
+        this.password = password;
     }
 
     public void logon() {
         System.out.println(loginPage.getTitleText());
         HtmlForm loginForm = getLoginForm(getFormsOf(loginPage));
-        loginForm.getInputByName("email").setValueAttribute("pereirasilvaluana@yahoo.com.br");
-        loginForm.getInputByName("pass").setValueAttribute("leavemealone1");
+        loginForm.getInputByName("email").setValueAttribute(login);
+        loginForm.getInputByName("pass").setValueAttribute(password);
         try {
             homePage = (HtmlPage) loginForm.getInputByValue("Log In").click();
             // if (homePage.getTitleText().contains("Log In | Facebook")) {

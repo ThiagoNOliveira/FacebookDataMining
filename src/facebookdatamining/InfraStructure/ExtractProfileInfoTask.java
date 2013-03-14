@@ -47,7 +47,6 @@ public class ExtractProfileInfoTask {
         FriendsExtractorService friendsExtractorService = new FriendsExtractorService(friendsData);
         extractProfileFriends(friendsExtractorService);
 
-        Thread.currentThread().interrupt();
     }
 
     private void extractAboutInfo(Profile profile, AboutDataExtractorService aboutService) {

@@ -21,6 +21,7 @@ public class AboutDataExtractorService {
     }
 
     public String getName() {
+        System.out.println("getname " + Thread.activeCount() + " " + aboutPage.getTitleText());
         DomNode name = aboutPage.querySelector("a.nameButton span");
         if (name != null) {
             return name.getTextContent();

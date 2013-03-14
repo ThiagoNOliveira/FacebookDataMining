@@ -26,14 +26,19 @@ public class ProfileController implements IBaseController {
         profiles = new ProfileRepository();
         webClient = new WebClient();
         webClient.waitForBackgroundJavaScript(10000);
+        webClient.setJavaScriptTimeout(10000);
         webClient.setThrowExceptionOnFailingStatusCode(false);
+        webClient.setThrowExceptionOnScriptError(false);
+        webClient.setCssEnabled(false);
+        webClient.setRedirectEnabled(true);
+        webClient.setJavaScriptEnabled(true);
         loginPage = getLoginPage();
     }
 
     @Override
-    public void extractInfo() {
+    public void extractInfo(String login, String password) {
 
-        loginService = new LoginService(loginPage);
+        loginService = new LoginService(loginPage, login, password);
         loginService.logon();
 
         while (true) {
@@ -43,6 +48,7 @@ public class ProfileController implements IBaseController {
                 ExtractorService extractorService = new ExtractorService(webClient, profiles);
                 extractorService.getInfo(profileActual);
 
+                webClient.getCache().clear();
             }
             if (profiles.getNext().isEmpty()) {
                 loginService.logout();
