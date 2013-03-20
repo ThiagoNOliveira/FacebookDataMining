@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <config>
+	<ConnectionString url="localhost/facebookdatamining?user=root&password=" />
 	<crawller>
 		<levelLimit>3</levelLimit>
 	</crawller>
-	<proxy>
-        <!-- Value default  0.0.0.0 -->
-        <host>0.0.0.0</host> 
-        <!-- Value default  00000 -->
-		<port>00000</port>
-		<!-- Value default  none -->
-        <user>none</user>
-        <!-- Value default  none -->
-        <password>none</password>
-    </proxy>
+	<acconts>
+		<login user="anbudeneve@hotmail.com" password="leavemealone"/>
+		<login user="rafael.nascimento42@yahoo.com.br" password="leavemealone"/>
+		<login user="miguel.brito28@yahoo.com" password="leavemealone"/>
+		<login user="pereirasilvaluana@yahoo.com.br" password="leavemealone1"/>
+	</acconts>
 </config>

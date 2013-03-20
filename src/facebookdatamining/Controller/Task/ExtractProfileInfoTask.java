@@ -1,4 +1,4 @@
-package facebookdatamining.InfraStructure;
+package facebookdatamining.Controller.Task;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import facebookdatamining.Domain.Entities.Profile;

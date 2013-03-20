@@ -12,11 +12,11 @@ import java.sql.SQLException;
  */
 public abstract class BaseRepository {
 
-    public Connection getConnection() {
+    public Connection getConnection(String connectionString) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             try {
-                return DriverManager.getConnection("jdbc:mysql://localhost/facebookdatamining?user=root&password=");
+                return DriverManager.getConnection("jdbc:mysql://"+ connectionString);
             } catch (SQLException ex) {
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);

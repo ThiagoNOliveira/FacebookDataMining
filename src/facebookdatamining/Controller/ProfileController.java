@@ -6,6 +6,7 @@ import facebookdatamining.Domain.Entities.Profile;
 import facebookdatamining.Domain.Repository.ProfileRepository;
 import facebookdatamining.Domain.Services.ExtractorService;
 import facebookdatamining.Domain.Services.LoginService;
+import facebookdatamining.InfraStructure.Config;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.logging.Level;
@@ -20,10 +21,12 @@ public class ProfileController implements IBaseController {
     private ProfileRepository profiles;
     private WebClient webClient;
     private HtmlPage loginPage;
+    private Config config;
 
-    public ProfileController() {
+    public ProfileController(Config config) {
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
-        profiles = new ProfileRepository();
+        this.config = config;
+        profiles = new ProfileRepository(config);
         webClient = new WebClient();
         webClient.waitForBackgroundJavaScript(10000);
         webClient.setJavaScriptTimeout(10000);

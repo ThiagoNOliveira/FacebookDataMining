@@ -1,6 +1,7 @@
 package facebookdatamining.Domain.Repository;
 
 import facebookdatamining.Domain.Entities.Profile;
+import facebookdatamining.InfraStructure.Config;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -19,16 +20,19 @@ public class ProfileRepository extends BaseRepository {
     private PreparedStatement ps;
     private String query;
     private String querySelect;
+    private Config config;
 
-    public ProfileRepository() {
-        conn = getConnection();
+    public ProfileRepository(Config config) {
+        this.config =  config;
+        conn = getConnection(this.config.getConnectionString());
+        
     }
 
     public void add(Set list, Profile profile) {
         query = "";
         try {
             if (conn.isClosed()) {
-                conn = getConnection();
+                conn = getConnection(config.getConnectionString());
             }
             if (!list.isEmpty()) {
                 query = "INSERT INTO `profile`(`Id`, `CrawllerLevel`) VALUES ";
@@ -78,7 +82,7 @@ public class ProfileRepository extends BaseRepository {
                 + ",`QuantityOfFriends`=" + (int) isNull(profile.getQuantityOfFriends()) + " WHERE `Id` = " + profile.getId() + ";";
         try {
             if (conn.isClosed()) {
-                conn = getConnection();
+                conn = getConnection(config.getConnectionString());
             }
             ps = conn.prepareStatement(query);
             ps.execute();
@@ -96,7 +100,7 @@ public class ProfileRepository extends BaseRepository {
         query = "UPDATE `profile` SET `Friends`=\"" + friendsList.toString() + "\" WHERE `Id` = " + profile.getId() + ";";
         try {
             if (conn.isClosed()) {
-                conn = getConnection();
+                conn = getConnection(config.getConnectionString());
             }
             ps = conn.prepareStatement(query);
             ps.execute();
@@ -113,7 +117,7 @@ public class ProfileRepository extends BaseRepository {
     public Set<Profile> getNext() {
         try {
             if (conn.isClosed()) {
-                conn = getConnection();
+                conn = getConnection(config.getConnectionString());
             }
             query = "Select `Id`, `CrawllerLevel` FROM profile where Recorded = 0;";
             ps = conn.prepareStatement(query);

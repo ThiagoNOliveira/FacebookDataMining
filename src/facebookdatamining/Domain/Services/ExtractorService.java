@@ -5,7 +5,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import facebookdatamining.Domain.Entities.Profile;
 import facebookdatamining.Domain.Repository.ProfileRepository;
-import facebookdatamining.InfraStructure.ExtractProfileInfoTask;
+import facebookdatamining.Controller.Task.ExtractProfileInfoTask;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.concurrent.Callable;
